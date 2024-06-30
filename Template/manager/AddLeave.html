@@ -1,0 +1,25 @@
+{% extends 'manager/Manager_Basic.html' %}
+    {% block head %}
+    <link rel="stylesheet" href="/static/CSS/formcss.css" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Leave</title>
+    {% endblock %}
+{% block body %}
+<div class="frm" id="frmm" >
+    <form action="/manage/createleave" >
+        <label for="leave_name">Leave Name:</label>
+        <input name="leave_name" required id="leave_name" autocomplete="off" placeholder="Enter Name of Leave"  />
+        <label for="leave_alias">Leave Alias:</label>
+        <input name="leave_alias" required id="leave_alias" autocomplete="off" placeholder="Enter Alias of Leave" />
+        <label for="leave_color">Select Leave Color:</label>
+        <input name="leave_color" required id="leave_color" type="color">
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+        <a href="/manage/showleaves"><button type="button">Show all</button></a>
+    </form>  
+    <div id="result">{{result}}</div>
+</div>  
+{% endblock %}
+

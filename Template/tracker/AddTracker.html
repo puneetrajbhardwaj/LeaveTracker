@@ -1,0 +1,79 @@
+{% extends 'tracker/Tracker_Basic.html' %}
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="stylesheet" href="/static/CSS/formcss.css" />
+    <link rel="stylesheet" href="/static/CSS/dropdown.css" />
+    <script src="/static/JS/tracker.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+{% endblock %}
+{% block body %}
+<div id="frmm">
+    <form class="frm" id="frm" action="/tracker/createtracker">        
+        <div id="dropdown">
+            <label for="employee_uid">Employee:</label>
+            <input type="text" required id="employee_uid" name="employee_uid" placeholder="Select an option" autocomplete="off" pattern="^[a-z A-Z 0-9()]*\([a-zA-Z0-9()]+\)$" oninvalid="this.setCustomValidity('Kindly Enter Emp in () eg:(ABC123)')">
+            <ul id="options">
+            </ul>
+          </div>
+          <label for="leave_name">Leave:</label>
+        <select name="leave_name" required="required" >
+            <option disabled selected>-Select Leave-</option>
+            {% for leave in leaves %}  
+            <option value="{{leave.leave_name}}" style="background-color:{{leave.leave_color}};">{{leave.leave_name}} ({{leave.leave_alias}})</option>
+            {% endfor %}
+        </select>
+        <label for="start_date">Start Date:</label>
+        <input required type="date" name="start_date" id="start_date"/>
+        <label for="end_date">End Date:</label>
+        <input required type="date" name="end_date" id="end_date"/>
+        <button type="button" onclick="checkDate()">Submit</button>
+        <button type="reset">Reset</button>
+     </form>  
+     <div id="result">{{result}}</div>
+    </div>
+     <script>
+     const dropdown = document.getElementById("dropdown");
+     const input = document.getElementById("employee_uid");
+     const list = document.getElementById("options");
+
+     input.addEventListener("keyup", function() { 
+       list.style.display = "block";
+       if(input.value==''){
+        list.style.display = "none";
+       }
+     });
+
+     list.addEventListener("click", function(event) {
+       input.value = event.target.innerText;
+       list.style.display = "none";
+     });
+
+    
+     function checkDate(){
+       var frm= document.getElementById('frm');
+       var strat_date=new Date(document.getElementById("start_date").value);
+       var employee_uid=document.getElementById('employee_uid').value;
+       var end_date=new Date(document.getElementById("end_date").value);
+       var difference=end_date.getTime()-strat_date.getTime();
+       var days=difference/(1000*60*60*24);
+       if((employee_uid.includes("(")== false) || (employee_uid.includes(")")== false)){
+         alert("Kindly enter Emp Id in () eg:(ABC123)")
+       }
+       else if(days >5){
+          if(confirm("Are you sure you want to submit leaves for: "+days+" days")){
+            frm.submit();
+          }
+
+       }
+       else{
+        frm.submit();
+       }
+     }
+     
+
+    </script>
+    
+{% endblock %}

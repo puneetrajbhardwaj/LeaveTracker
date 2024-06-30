@@ -1,0 +1,48 @@
+{% extends 'tracker/Tracker_Basic.html' %}
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/script" src="/static/JS/dropdown.js"></script>
+    <link rel="stylesheet" href="/static/CSS/formcss.css" />
+    <link rel="stylesheet" href="/static/CSS/dropdown.css" />
+    <script src="/static/JS/tracker.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtered</title>
+{% endblock %}
+{% block body %}
+<form class="frm" action="/tracker/displayfilterresult">        
+  <div id="filter_dropdown">
+      <label for="filter_employee_uid">Employee:</label>
+      <input required type="text" id="filter_employee_uid" name="filter_employee_uid" placeholder="Select an option" autocomplete="off">
+      <ul id="filter_options">
+      </ul>
+    </div>
+  <label for="date">Start Date:</label>
+  <input required type="date" name="start_date" id="start_date"/>
+  <label for="date">End Date:</label>
+  <input required type="date" name="end_date" id="end_date"/>
+  <button type="submit">Submit</button>
+  <button type="reset">Reset</button>
+</form>   
+<script>
+const filter_dropdown = document.getElementById("filter_dropdown");
+const filter_input = document.getElementById("filter_employee_uid");
+const filter_list = document.getElementById("filter_options");
+
+filter_input.addEventListener("keyup", function() { 
+ filter_list.style.display = "block";
+ if(filter_input.value==''){
+  filter_list.style.display = "none";
+ }
+});
+
+
+list.addEventListener("click", function(event) {
+ filter_input.value = event.target.innerText;
+ filter_list.style.display = "none";
+});
+
+</script>
+    
+{% endblock %}

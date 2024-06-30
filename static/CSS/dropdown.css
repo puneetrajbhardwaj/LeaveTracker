@@ -1,0 +1,26 @@
+#dropdown ,#filter_dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+#dropdown ul , #filter_dropdown ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: none;
+    position: absolute;
+    z-index: 1;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+#dropdown li , #filter_dropdown li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#dropdown input , #filter_dropdown input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 200px;
+}

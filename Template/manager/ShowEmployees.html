@@ -1,0 +1,61 @@
+{% extends 'manager/Manager_Basic.html' %}
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Employees</title>
+    <link rel="stylesheet" href="/static/CSS/mymodel.css" />
+    <link rel="stylesheet" href="/static/CSS/showitem.css" />
+    <link rel="stylesheet" href="/static/CSS/formcss.css" />
+    {% endblock %}
+{% block body %}
+<div class="maindiv">
+    <a style="margin:30px;" href="/manage/addemployee/"><button>Add Employee</button></a>
+<ul>
+    <li class="ttl row"><span class="col">Employee Name</span><span class="col"> Employee UID</span><span class="col">Edit Employee</span><span class="col">Delete Employee</span></li>       
+    {% for employee in employees %}
+    <li class="row"><span class="col">{{employee.employee_name}}</span> <span class="col">{{employee.employee_uid}}</span><span class="col"><a href="#"><button type="button" data='{"employee_uid":"{{employee.employee_uid}}","employee_name":"{{employee.employee_name}}"}' data-toggle="modal" data-target="#myModal" class="edit_employee" >Edit</button></a></span><span class="col"><a href="/manage/deleteemployee/{{employee.employee_uid}}" onclick="return confirm('Are you sure you want to delete {{employee.employee_name}} from Employees')"><button>Delete</button></a></span></li>
+    {% endfor %}
+</ul>
+</div>
+    <div class="container">
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+          <div class="modal-dialog">
+          
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Edit Details:</h3>
+              </div>
+              <div class="modal-body">
+                <div class="frm"  >
+                    <form  id="frm" action="#">
+                        <label for="employee_name">Enployee Name:</label>
+                        <input name="employee_name" id="employee_name" required placeholder="Enter Name of Employee" value="{{employee.employee_name}}" />
+                        <label for="employee_uid">Enployee UID:</label>
+                        <input name="employee_uid" id="employee_uid" required placeholder="Enter UID of Employee" value="{{employee.employee_uid}}" />
+                        <button type="submit">Submit</button>
+                        <button type="reset">Reset</button>
+                    </form> 
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+      <script>
+    
+        $(".edit_employee").click(function() {           
+         data= $(this).attr("data");
+         data=$.parseJSON(data);
+         $('#employee_uid').val(data.employee_uid);
+         $('#employee_name').val(data.employee_name);         
+         $('#frm').attr('action',"/manage/saveemployee/"+data.employee_uid);
+      });
+  
+      </script>  
+{% endblock %}

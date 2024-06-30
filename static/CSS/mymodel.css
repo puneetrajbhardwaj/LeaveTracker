@@ -1,0 +1,19 @@
+.modal-content {
+    background-color: #ddd;
+    width: fit-content;
+  }
+
+  .modal-body {
+    position: relative;
+    padding: 0;
+  }
+
+
+button,
+html input[type="button"], 
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer; 
+  margin: 7px;
+}

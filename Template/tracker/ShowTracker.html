@@ -1,0 +1,193 @@
+{% extends 'tracker/Tracker_Basic.html' %}
+    {% block head %}
+    <link rel="stylesheet" href="/static/CSS/showitem.css" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/static/CSS/formcss.css" />
+    <link rel="stylesheet" href="/static/CSS/dropdown.css" />
+    <script src="/static/JS/tracker.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/CSS/mymodel.css" />
+    <title>Tracker</title>
+{% endblock %}
+{% block body %}
+<div class="maindiv">
+  <button type="button" data-toggle="modal" data-target="#FilterModal">Filter</button>
+<div class="ttl row">
+    <div class="col">
+        Employee Name(UID):
+    </div>
+    <div class="col">
+        Leave Type:
+    </div>
+    <div class="col">
+        Date:
+    </div>
+    <div class="col">
+        Edit Entry:
+    </div>
+    <div class="col">
+        Delete Entry:
+    </div>
+</div>
+{% for d in data %}
+<div class="row">
+    <div class="col">
+        {{d.employee.employee_name}}({{d.employee.employee_uid}})
+    </div>
+    <div class="col">
+        {{d.leave.leave_name}}
+    </div>
+    <div class="col">
+        {{d.date}}
+    </div>
+    <div class="col">
+        <a href="#" ><button type="button" data='{"tracker_id":"{{d.tracker_id}}","employee_name":"{{d.employee.employee_name}}","employee_uid":"{{d.employee.employee_uid}}","leave_name":"{{d.leave.leave_name}}","date_day":"{{d.date.day}}","date_month":"{{d.date.month}}","date_year":"{{d.date.year}}"}' data-toggle="modal" data-target="#myModal" class="edit_entry" >Edit</button></a>
+    </div>
+    <div class="col">  
+        <a href="/tracker/deleteentry/{{d.tracker_id}}" onclick="return confirm('Are you sure you want to delete this entry')"><button type="button" >Delete</button></a>
+    </div>       
+</div>
+{% endfor %}
+</div>
+<div class="container">
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+  
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3>Edit Details:</h3>
+      </div>
+      <div class="modal-body">
+            <form class="frm" id="frm" action="#">        
+                <div id="dropdown">
+                    <label for="employee_uid">Employee:</label>
+                    <input required type="text" id="employee_uid" name="employee_uid"  placeholder="Select an option" autocomplete="off" pattern="^[a-z A-Z 0-9()]*\([a-zA-Z0-9()]+\)$" oninvalid="this.setCustomValidity('Kindly Enter Emp in () eg:(ABC123)')">
+                    <ul id="options">
+                    </ul>
+                  </div>
+                  <label for="leave_name">Leave:</label>
+                <select name="leave_name" id="leave_name" required="required">
+                    <option disabled >-Select Leave-</option>
+                    {% for leave in leaves %}  
+                    <option value="{{leave.leave_name}}" style="background-color:{{leave.leave_color}};">{{leave.leave_name}} ({{leave.leave_alias}})</option>
+                    {% endfor %}
+                </select>
+                <label for="date">Date:</label>
+                <input required type="date" name="tracker_date" id="tracker_date" oninvalid="this.setCustomValidity('Kindly Select date.')"/>
+                <button type="submit">Submit</button>
+                <button type="reset">Reset</button>
+             </form>   
+             <script>
+             const dropdown = document.getElementById("dropdown");
+             const input = document.getElementById("employee_uid");
+             const list = document.getElementById("options");
+        
+             input.addEventListener("keyup", function() { 
+               list.style.display = "block";
+               if(input.value==''){
+                list.style.display = "none";
+               }
+             });
+        
+             list.addEventListener("click", function(event) {
+               input.value = event.target.innerText;
+               list.style.display = "none";
+             });
+
+             $ (".edit_entry").click(function() {
+               data= $(this).attr("data");
+               data=$.parseJSON(data);
+               $('#employee_uid').val(data.employee_name+'('+data.employee_uid+')')
+               $('#leave_name option').each(function(){
+                 if($(this).val()==data.leave_name){
+                    $(this).prop('selected',true);
+                 }
+               });
+              if(data.date_month<=9){
+                data.date_month='0'+data.date_month;
+              }
+              if(data.date_day<=9){
+                data.date_day='0'+data.date_day;
+              }
+              date=data.date_year+'-'+data.date_month+'-'+data.date_day;
+              $('#tracker_date').val(date);
+              $('#frm').attr('action','/tracker/editentry/'+data.tracker_id);
+            });
+        
+            </script>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div> -->
+    </div>
+    
+  </div>
+</div>
+
+</div>
+<div class="container">
+<!-- Modal -->
+<div class="modal fade" id="FilterModal" role="dialog">
+  <div class="modal-dialog">
+  
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3>Filter:</h3>
+      </div>
+      <div class="modal-body">
+        <form class="frm" action="/tracker/displayfilterresult">        
+          <div id="filter_dropdown">
+              <label for="employee_uid">Employee:</label>
+              <input required type="text" id="filter_employee_uid" name="filter_employee_uid" placeholder="Select an option" autocomplete="off" pattern="^[a-z A-Z 0-9()]*\([a-zA-Z0-9()]+\)$" oninvalid="this.setCustomValidity('Kindly Enter Emp in () eg:(ABC123)')">
+              <ul id="filter_options">
+              </ul>
+            </div>
+          <label for="date">Start Date:</label>
+          <input required type="date" name="start_date" id="start_date"  oninvalid="alert('Kindly Select start dates')"/>
+          <label for="date">End Date:</label>
+          <input required type="date" name="end_date" id="end_date" oninvalid="alert('Kindly Select end dates')"/>
+          <button type="submit">Submit</button>
+          <button type="reset">Reset</button>
+       </form>   
+       <script>   
+       const filter_dropdown = document.getElementById("filter_dropdown");
+       const filter_input = document.getElementById("filter_employee_uid");
+       const filter_list = document.getElementById("filter_options");
+  
+       filter_input.addEventListener("keyup", function() { 
+         filter_list.style.display = "block";
+         if(filter_input.value==''){
+           console.log("input is empty")
+          filter_list.style.display = "none";
+         }
+       });
+       
+  
+       filter_list.addEventListener("click", function(event) {
+         filter_input.value = event.target.innerText;
+         filter_list.style.display = "none";
+       });
+  
+      </script>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div> -->
+    </div>
+    
+  </div>
+</div>
+
+</div>
+    
+{% endblock %}

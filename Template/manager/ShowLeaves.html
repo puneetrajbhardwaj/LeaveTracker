@@ -1,0 +1,68 @@
+{% extends 'manager/Manager_Basic.html' %}
+{% block head %}
+<link rel="stylesheet" href="/static/CSS/mymodel.css" />
+<link rel="stylesheet" href="/static/CSS/showitem.css" />
+<link rel="stylesheet" href="/static/CSS/formcss.css" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Show Leaves</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+{% block body %}
+<div class="maindiv">
+    <a style="margin-top:10 px;" href="/manage/addleave/"><button>Add Leave</button></a>
+<h1 style="display:block;">
+    These are the Leaves:
+</h1>
+<ul>
+    <li class="row ttl" ><span class="col">Leave Name</span><span class="col">Leave Alias</span><span class="col"> Leave Color</span><span class="col">Edit Leave</span><span class="col">Delete Leave</span></li>
+    {% for leave in leaves %}
+    <li class="row" ><span class="col">{{leave.leave_name}}</span><span class="col"> {{leave.leave_alias}}</span> <span class="col">  <input type="color" value={{leave.leave_color}} disabled /></span> <span class="col"><button type="button" data='{"leave_name":"{{leave.leave_name}}","leave_alias":"{{leave.leave_alias}}","leave_color":"{{leave.leave_color}}"}' data-toggle="modal" data-target="#myModal" class="edit_leave" >Edit</button></a></span><span class="col"> <a onclick="return confirm('Are you sure you want to delete {{leave.leave_name}} from leaves')" href="/manage/deleteleave/{{leave.leave_name}}"><button>Delete</button></a></span></li>
+    {% endfor %}
+</ul>
+<div> 
+    <div class="container">
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+          <div class="modal-dialog">
+          
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Edit Details:</h3>
+              </div>
+              <div class="modal-body">
+                <div class="frm" >
+                    <form id="frm" >
+                        <label for="leave_name">Leave Name:</label>
+                        <input name="leave_name" required id="leave_name" placeholder="Enter Name of Leave"  />
+                        <label for="leave_alias">Leave Alias:</label>
+                        <input name="leave_alias" required id="leave_alias" placeholder="Enter Alias of Leave"  />
+                        <label for="leave_color">Leave Color:</label>
+                        <input name="leave_color" required id="leave_color" type="color" >
+                        <button type="submit">Submit</button>
+                        <button type="reset">Reset</button>
+                    </form>    
+                </div>  
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+      <script>
+    
+        $(".edit_leave").click(function() {       
+         data= $(this).attr("data");
+         data=$.parseJSON(data);
+         $('#leave_name').val(data.leave_name);
+         $('#leave_alias').val(data.leave_alias);
+         $('#leave_color').val(data.leave_color);         
+         $('#frm').attr('action',"/manage/saveleave/"+data.leave_name);
+      });
+  
+      </script>         
+{% endblock %}
+

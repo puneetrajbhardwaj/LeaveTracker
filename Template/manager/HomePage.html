@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        *{
+        margin:0;
+        padding:0;
+    }
+    body{
+        background-color: orange;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        
+    }
+
+    .btn{
+        height: 150px;
+        width: 150px;
+        margin: 250px 50px; 
+        border-radius: 25px;
+        background-color: rgb(0, 119, 255);
+        display: inline-block;
+    }
+
+    a{
+        text-decoration: none;
+    }
+    .btn:hover{
+        cursor: pointer;
+        background-color: orangered;
+    }
+
+    a .btn{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 30px;
+        font-weight: bold;
+    }
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/manage/showemployees"><div class="btn">Manage</div></a>
+<a href="/tracker/trackerglance"><div class="btn">Track</div></a>
+</body>
+</html>
