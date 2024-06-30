@@ -20,7 +20,7 @@ def AddTracker(request):
 def CreateTracker(request):
     try:
         employee_uid=request.GET['employee_uid']
-        employee_uid=employee_uid[employee_uid.index("(")+1:employee_uid.index("(")+7]
+        employee_uid=employee_uid[employee_uid.index("(")+1:employee_uid.index(")")]
         employee=Employee.objects.get(employee_uid=employee_uid) 
         leave_name=request.GET['leave_name']
         leave=Leave.objects.get(leave_name=leave_name)
@@ -31,7 +31,6 @@ def CreateTracker(request):
         date=start_date
         while(date<=end_date):
             Tracker.objects.create(employee=employee,leave=leave,date=date)
-            print(date,'------------------------------------------------')
             date=date+timedelta(days=1)
         employees=Employee.objects.all()
         leaves=Leave.objects.all()    
