@@ -79,7 +79,7 @@ def FilterTracker(request):
 def DisplayFilterResult(request):
     try:
         employee_uid=request.GET['filter_employee_uid']
-        employee_uid=employee_uid[employee_uid.index("(")+1:employee_uid.index("(")+7]
+        employee_uid=employee_uid[employee_uid.index("(")+1:employee_uid.index(")")]
         employee=Employee.objects.get(employee_uid=employee_uid) 
         start_date=request.GET['start_date']
         end_date=request.GET['end_date']
