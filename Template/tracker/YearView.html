@@ -396,7 +396,6 @@
 			var month= new Date(data[index].date).getMonth()+1;
 			var day=new Date(data[index].date).getDate();
 			var mo=$('.mo').eq(month)
-			alert(mo.text());
 			var dt=mo.siblings('.dt');
 			dt.each(function(){
 				if($(this).text()==day){
