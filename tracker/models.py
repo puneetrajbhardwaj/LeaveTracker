@@ -3,8 +3,8 @@ from manager.models import Employee,Leave
 
 class Tracker(models.Model):
     tracker_id=models.AutoField(primary_key=True)
-    employee= models.ForeignKey(Employee,on_delete=models.DO_NOTHING)
-    leave=models.ForeignKey(Leave,on_delete=models.DO_NOTHING)
+    employee= models.ForeignKey(Employee,on_delete=models.CASCADE)
+    leave=models.ForeignKey(Leave,on_delete=models.CASCADE)
     date=models.DateField()
 
     class Meta:
